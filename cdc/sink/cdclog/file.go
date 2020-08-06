@@ -30,7 +30,27 @@ import (
 )
 
 const (
-	defaultFileMode = 0644
+	OS_READ = 04
+	OS_WRITE = 02
+	OS_EX = 01
+	OS_USER_SHIFT = 6
+	OS_GROUP_SHIFT = 3
+	OS_OTH_SHIFT = 0
+
+	OS_USER_R = OS_READ<<OS_USER_SHIFT
+	OS_USER_W = OS_WRITE<<OS_USER_SHIFT
+	OS_USER_X = OS_EX<<OS_USER_SHIFT
+	OS_USER_RW = OS_USER_R | OS_USER_W
+	OS_USER_RWX = OS_USER_RW | OS_USER_X
+
+	OS_GROUP_R = OS_READ<<OS_GROUP_SHIFT
+	OS_OTH_R = OS_READ<<OS_OTH_SHIFT
+	OS_ALL_R = OS_USER_R | OS_GROUP_R | OS_OTH_R
+)
+
+const (
+	defaultDirMode = os.ModeDir | (OS_USER_RWX | OS_ALL_R)
+	defaultFileMode = OS_USER_RWX | OS_ALL_R
 
 	maxRowFileSize = 10 << 20 // TODO update
 )
@@ -99,7 +119,7 @@ func (f *fileSink) flushTableStreams() {
 
 			if ts.rowFile == nil {
 				// create new file to append data
-				err := os.MkdirAll(tableDir, os.ModeDir)
+				err := os.MkdirAll(tableDir, defaultDirMode)
 				if err != nil {
 					errCh <- err
 				}
@@ -257,7 +277,7 @@ func (f *fileSink) Initialize(ctx context.Context, tableInfo []*model.SimpleTabl
 		for _, table := range tableInfo {
 			if table != nil {
 				name := makeTableDirectoryName(table.TableID)
-				err := os.MkdirAll(path.Join(f.logPath.root, name), defaultFileMode)
+				err := os.MkdirAll(path.Join(f.logPath.root, name), defaultDirMode)
 				if err != nil {
 					return errors.Annotatef(err, "create table directory for %s on failed", name)
 				}
@@ -301,7 +321,7 @@ func NewLocalFileSink(sinkURI *url.URL) (*fileSink, error) {
 		meta: rootPath + logMetaFile,
 		ddl:  rootPath + ddlEventsDir,
 	}
-	err := os.MkdirAll(logPath.ddl, os.ModeDir)
+	err := os.MkdirAll(logPath.ddl, defaultDirMode)
 	if err != nil {
 		log.Error("create ddl path failed",
 			zap.String("ddl path", logPath.ddl),
