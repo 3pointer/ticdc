@@ -497,7 +497,7 @@ func (s *s3Sink) EmitDDLEvent(ctx context.Context, ddl *model.DDLEvent) error {
 		// no ddl file exists or
 		// exists file is oversized. we should generate a new file
 		fileData = data
-		name = s.prefix + makeDDLFileName(ddl.CommitTs)
+		name = s.prefix + makeDDLFileObject(ddl.CommitTs)
 		log.Debug("[EmitDDLEvent] create first or rotate ddl log",
 			zap.String("name", name), zap.Any("ddl", ddl))
 	} else {

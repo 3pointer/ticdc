@@ -68,6 +68,10 @@ func makeLogMetaContent(tableInfos []*model.SimpleTableInfo) *logMeta {
 	return meta
 }
 
+func makeDDLFileObject(commitTS uint64) string {
+	return fmt.Sprintf("%s/%s", ddlEventsDir, makeDDLFileName(commitTS))
+}
+
 func makeDDLFileName(commitTS uint64) string {
-	return fmt.Sprintf("%s/%s.%d", ddlEventsDir, ddlEventsPrefix, maxUint64-commitTS)
+	return fmt.Sprintf("%s.%d", ddlEventsPrefix, maxUint64-commitTS)
 }
