@@ -30,27 +30,8 @@ import (
 )
 
 const (
-	OS_READ = 04
-	OS_WRITE = 02
-	OS_EX = 01
-	OS_USER_SHIFT = 6
-	OS_GROUP_SHIFT = 3
-	OS_OTH_SHIFT = 0
-
-	OS_USER_R = OS_READ<<OS_USER_SHIFT
-	OS_USER_W = OS_WRITE<<OS_USER_SHIFT
-	OS_USER_X = OS_EX<<OS_USER_SHIFT
-	OS_USER_RW = OS_USER_R | OS_USER_W
-	OS_USER_RWX = OS_USER_RW | OS_USER_X
-
-	OS_GROUP_R = OS_READ<<OS_GROUP_SHIFT
-	OS_OTH_R = OS_READ<<OS_OTH_SHIFT
-	OS_ALL_R = OS_USER_R | OS_GROUP_R | OS_OTH_R
-)
-
-const (
-	defaultDirMode = os.ModeDir | (OS_USER_RWX | OS_ALL_R)
-	defaultFileMode = OS_USER_RWX | OS_ALL_R
+	defaultDirMode = 0755
+	defaultFileMode = 0644
 
 	maxRowFileSize = 10 << 20 // TODO update
 )
