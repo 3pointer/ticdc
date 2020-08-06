@@ -104,7 +104,7 @@ func (f *fileSink) flushTableStreams() {
 				if err != nil {
 					errCh <- err
 				}
-				file, err := os.OpenFile(path.Join(tableDir, fileName), os.O_CREATE|os.O_APPEND, defaultFileMode)
+				file, err := os.OpenFile(path.Join(tableDir, fileName), os.O_CREATE|os.O_WRONLY|os.O_APPEND, defaultFileMode)
 				if err != nil {
 					errCh <- err
 				}
@@ -122,7 +122,7 @@ func (f *fileSink) flushTableStreams() {
 				if err != nil {
 					errCh <- err
 				}
-				file, err := os.OpenFile(path.Join(tableDir, fileName), os.O_CREATE|os.O_APPEND, defaultFileMode)
+				file, err := os.OpenFile(path.Join(tableDir, fileName), os.O_CREATE|os.O_WRONLY|os.O_APPEND, defaultFileMode)
 				if err != nil {
 					errCh <- err
 				}
@@ -143,7 +143,7 @@ func (f *fileSink) flushTableStreams() {
 
 func (f *fileSink) createDDLFile(commitTs uint64) (*os.File, error) {
 	fileName := makeDDLFileName(commitTs)
-	file, err := os.OpenFile(path.Join(f.logPath.ddl, fileName), os.O_CREATE|os.O_APPEND, defaultFileMode)
+	file, err := os.OpenFile(path.Join(f.logPath.ddl, fileName), os.O_CREATE|os.O_WRONLY|os.O_APPEND, defaultFileMode)
 	if err != nil {
 		log.Error("[EmitDDLEvent] create ddl file failed", zap.Error(err))
 		return nil, err
