@@ -44,8 +44,12 @@ func makeTableDirectoryName(tableID int64) string {
 	return fmt.Sprintf("%s%d", tablePrefix, tableID)
 }
 
-func makeTableFileName(tableID int64, commitTS uint64) string {
-	return fmt.Sprintf("%s%d/cdclog.%d", tablePrefix, tableID, commitTS)
+func makeTableFileObject(tableID int64, commitTS uint64) string {
+	return fmt.Sprintf("%s%d/%s", tablePrefix, tableID, makeTableFileName(commitTS))
+}
+
+func makeTableFileName(commitTS uint64) string {
+	return fmt.Sprintf("cdclog.%d", commitTS)
 }
 
 func makeLogMetaContent(tableInfos []*model.SimpleTableInfo) *logMeta {

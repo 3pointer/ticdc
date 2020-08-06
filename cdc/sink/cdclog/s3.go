@@ -172,7 +172,7 @@ func (tb *tableBuffer) Flush(ctx context.Context, s *s3Sink) error {
 		flushedKeys += int64(len(row.Keys))
 		if event == sendEvents-1 {
 			// if last event, we record ts as new rotate file name
-			newFileName = makeTableFileName(row.Table.TableID, row.CommitTs)
+			newFileName = makeTableFileObject(row.Table.TableID, row.CommitTs)
 		}
 
 		data, err := row.ToProtoBuf().Marshal()
