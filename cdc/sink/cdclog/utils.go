@@ -17,6 +17,9 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/pingcap/log"
+	"go.uber.org/zap"
+
 	"github.com/pingcap/ticdc/cdc/model"
 )
 
@@ -57,6 +60,7 @@ func makeLogMetaContent(tableInfos []*model.SimpleTableInfo) *logMeta {
 	names := make(map[int64]string)
 	for _, table := range tableInfos {
 		if table != nil {
+			log.Info("[makeLogMetaContent]", zap.Reflect("table", table))
 			names[table.TableID] = fmt.Sprintf("%s.%s", table.Schema, table.Table)
 		}
 	}

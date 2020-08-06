@@ -99,7 +99,7 @@ func (f *fileSink) flushTableStreams() {
 
 			if ts.rowFile == nil {
 				// create new file to append data
-				err := os.MkdirAll(tableDir, defaultFileMode)
+				err := os.MkdirAll(tableDir, os.ModeDir)
 				if err != nil {
 					errCh <- err
 				}
@@ -172,6 +172,8 @@ func (f *fileSink) EmitRowChangedEvents(ctx context.Context, rows ...*model.RowC
 			return ctx.Err()
 		case f.tableStreams[hash].dataCh <- row:
 			f.tableStreams[hash].sendEvents.Inc()
+			// TODO give a approximate size of this row
+			f.tableStreams[hash].sendSize.Add(int64(len(row.Keys) * 128))
 		}
 	}
 	return nil
@@ -299,8 +301,11 @@ func NewLocalFileSink(sinkURI *url.URL) (*fileSink, error) {
 		meta: rootPath + logMetaFile,
 		ddl:  rootPath + ddlEventsDir,
 	}
-	err := os.MkdirAll(logPath.ddl, defaultFileMode)
+	err := os.MkdirAll(logPath.ddl, os.ModeDir)
 	if err != nil {
+		log.Error("create ddl path failed",
+			zap.String("ddl path", logPath.ddl),
+			zap.Error(err))
 		return nil, err
 	}
 	return &fileSink{
