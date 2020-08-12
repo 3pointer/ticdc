@@ -168,7 +168,7 @@ func (tb *tableBuffer) flush(ctx context.Context, s *s3Sink) error {
 		flushedSize += row.ApproximateSize
 		if event == sendEvents-1 {
 			// if last event, we record ts as new rotate file name
-			newFileName = makeTableFileObject(row.Table.TableID, row.CommitTs)
+			newFileName = makeTableFileObject(tb.tableID, row.CommitTs)
 		}
 		_, err := encoder.AppendRowChangedEvent(row)
 		if err != nil {
@@ -369,7 +369,7 @@ func (s *s3Sink) EmitRowChangedEvents(ctx context.Context, rows ...*model.RowCha
 	shouldFlush := false
 	for _, row := range rows {
 		// dispatch row event by tableID
-		tableID := row.Table.GetTableID()
+		tableID := int64(0)
 		var (
 			ok   bool
 			item interface{}

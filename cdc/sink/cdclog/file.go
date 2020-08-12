@@ -165,7 +165,7 @@ func (f *fileSink) createDDLFile(commitTs uint64) (*os.File, error) {
 func (f *fileSink) EmitRowChangedEvents(ctx context.Context, rows ...*model.RowChangedEvent) error {
 	for _, row := range rows {
 		// dispatch row event by tableID
-		tableID := row.Table.GetTableID()
+		tableID := int64(0)
 		var (
 			ok   bool
 			item interface{}

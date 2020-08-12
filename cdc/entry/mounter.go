@@ -442,7 +442,6 @@ func (m *mounterImpl) mountRowKVEntry(tableInfo *model.TableInfo, row *rowKVEntr
 		Table: &model.TableName{
 			Schema:    schemaName,
 			Table:     tableName,
-			TableID:   row.PhysicalTableID,
 			Partition: partitionID,
 		},
 		IndieMarkCol: tableInfo.IndieMarkCol,

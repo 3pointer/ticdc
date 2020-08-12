@@ -166,7 +166,6 @@ func (b *ColumnFlagType) UnsetIsNullable() {
 type TableName struct {
 	Schema    string `toml:"db-name" json:"db-name"`
 	Table     string `toml:"tbl-name" json:"tbl-name"`
-	TableID   int64  `toml:"tbl-id" json:"tbl-id"`
 	Partition int64  `json:"partition"`
 }
 
@@ -188,11 +187,6 @@ func (t *TableName) GetSchema() string {
 // GetTable returns table name.
 func (t *TableName) GetTable() string {
 	return t.Table
-}
-
-// GetTableID returns table ID.
-func (t *TableName) GetTableID() int64 {
-	return t.TableID
 }
 
 // RowChangedEvent represents a row changed event
